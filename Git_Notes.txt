@@ -1,0 +1,133 @@
+Git config Hierarchy (Overrides hirerarchly):
+
+[RepoLevel Settings]
+	[UserLevel Settings]
+		[SystemLevel Settings]
+
+
+[git config --global core.editor vim]: Set the default editor for Files (vim for example)
+[git config --global core.autocrlf true]: Decides if it should convert CRLF from windows into simple line breaks. Set True for Windows.
+[git config --global color.ui auto]: Sets output colors when in Terminal for different Git operations.
+[git config --global help.autocorrect 1]: If you mispell one command Git can try to execute a similar named command. (1 for True)
+
+[git config core.autocrlf true]: Affects Repo level settings.
+
+[git config --unset core.autocrlf]: Remove the added settings
+
+
+
+[git init]: Initializes a git repo in the current folder.
+[echo "" > Readme.txt]: Write text to a readme.txt file.
+[git status]: Shows the status of the repository (including files that have not been added to source control).
+[git add Readme.txt]: Adds the Readme.txt file to the repository.
+[git add -A]: Adds all files to the repo including untrack ones.
+[git commit]: Brings editor to check in changes.
+[git commit -m "Updated"]: Use the -m to specify the commit comment on the same line without the need to open the text editor.
+[git commit -am]: Adds any modified files to the commit. Specify a commit comment.
+[git log]: See the log of the current folder.
+When the log is too big to fit on the screen it gets paged. You can exit by pressing q.
+[git log --oneline]: Provides a condensed version of the log in one line.
+[git log --oneline | wc -l]: Use the WordCount function to count -line by line to see all the commits on the repo.
+[git log --oneline --graph]: Provides an additional graph on the left to see all the branches and merges that happened.
+[git log --oneline --graph --decorate] The decorate option further decorates the Log with tag names, branch names, etc.
+[git shortlog]: Lists off the Authors and the commit messages for them, and the commits they've made. From alphb order
+[git shortlog -sne]: the -sne stands for -Summary so don't have individual commit messages, order numeric by number of commits decreasing, and get the emails.
+NOTE: Github web also provides some insights.
+
+---Commits
+[git show HEAD]: git show shows the commit info, in this case we look at the HEAD commit.
+[git show 123456]: To show specific commit.
+
+[git add-u]: Add updated files into commit. (Stage changes to be commited, you have to explicitly call git commmit)
+[git diff 580663d..b724027]: Get the differences between 2 changesets.
+[git diff HEAD~1..]: Compare latest changes.
+[touch file1.txt file2.txt]: Add file1.txt and file.txt to Included changes.
+[rm file2.txt]: Delete file.
+[mv file1.txt new_file_name.txt]: Rename file1.txt
+When you rename a file git inittialy thinks that is a Del and Add of files, but when you do a git add -A, it realizes is a file rename.
+[git checkout README.txt]: Revert file changes back to the head version.
+
+
+[CAREFUL][git reset --hard]: Resets the working copy back to the HEAD copy, removing all the pending changes:
+[CAREFUL][git reset --soft HEAD~1]: Removes the last commit of the repository. Reverts the changes that I undo with the reset --hard and I get back the previous changes.
+							IMPORTANT NOTE: Rollbacks the repository, meaning that further changes are lost. BUT, changes are still there.
+[CAREFUL][git reset --hard HEAD~1] :THIS, by the contrary, will rollback the Head back, delete that last commit, and will UNDO ANY pending changes.
+These 2 are useful when I want to clean my local repository before pushing into a public repository.
+
+[git clean]: Needs to specify an option. git clean will remove any added files to the repository that have not been checked for changes.
+[git clean -n]: Returns the files that will be removed.
+[git clean -f]: Removes the files.
+
+
+[Adding a .gitignore file on the root folder of the repository]: Here we can specify which files we don't want to commit into the repository.
+This .gitignore file has to be commited.
+inside .gitignore text Examples:
+/logs/*.txt
+/logs/*.log
+/logs
+
+
+----------------------------------------------Working Remote----------------------------------------------------
+[git clone url]: Clones the given URL to the local repository.
+
+
+From Local to GitHub: You have to create a new repository in GitHub. After creation it will suggest you to upload your code from the local repo to the created one.
+using [git push -u origin master] to push to the master branch in the origin remote repo.
+
+[git remote]: To see which repositories I have as remote. origin is the default name for the remote repository.
+[git remote -v]: lists my remote repositories, both the fetch and push URLs. These might be different.
+
+[cat .git/config]: See that for remote/cloned environments the attribute remote=origin displays, as well as the merge = refs/heads/master.
+
+[git branch]: shows the branches on the repository.
+[git branch -r]: Shows the remote branches that are beeing shared remotely 
+[git tag]: Stable points, known points in the code base which often, tag versions.
+[git remote add origin URL/GitFundamentals.git]: Add a git repository where for example, others might push changes into and then from this URL repo, you can
+pull the changes done into your local repository. (origin param used as a common name)
+
+-----Fetching from a Remote-----
+[git fetch]: Pull changes from the remote repository into the Master local repository.
+[git fetch origin]: If there are multiple remote repositories pull changes from the specified repo (origin in this case)
+[git log origin/master]: Get the log from the master branch in the the origin remote repository.
+[git log origin/master..HEAD]: See the Head changeset.
+
+[git merge origin/master]: Merge from the online repo origin/master into my current branch.
+[fast forward merge]: Means that the merge request started from the commit that I don't have locally.
+
+
+-------Pulling from a Remote--------
+[When merging a remote repository with our local, we have to do a [git fetch] and [git merge origin/master].
+That's the reason on why pull exists.
+[git pull]: fetches the remote repo/branch and merges the changes.
+
+[git branch --set-upstream master origin/master] establish that out local master branch will equal to the origin/master remote repo.
+
+
+-------Pushing to a Remote------------
+[git push]: Pushes my changes into the remote repository. Asks for Username/Password for github.
+Note: Another way of doing it would be to remove the remote repository using [git remote rm origin]
+and then add it again using the SSH way, with [git remote add origin git@github.com:AlexZugas/GitFundamentals.git]
+
+
+[git tag TagName]: Creates a tag that's linked with the HEAD commmit. Used mostly for stable points
+[git tag -a TagName_With_Message]: Create a tag that also has a message. An editor is opened to provide the tag message.
+[git tag -a TagName_With_Message -m Tag_Message]: Provide the Tag message in line.
+[git tag -s V1.0_Signed]: Create a Signed Tag. A Signed Tag ALWAYS requires a Message. Signs the Tag with an RSA Key.
+						NOTE: If you don't have configured an RSA Key, it will message 'Signing failed: Secret Key not available".
+[git tag -v v1.0_With_Message]: -v stands for Verify, it verifies the Tag with it's sign. If it is not signed it will say that the signature is not found and cannot be verified.
+
+----Commiting tags to the Remote:
+tags do not get commited to a remote repository using just [git push]
+You have to specify the tags option:
+[git push --tags]
+It creates the tags on the remote repository.
+Since it creates the tag and points to the HEAD commit when the tag was created, when you go to Releases in GitHub you can see the tags with the optino to download the code up to that point.
+
+
+[---------Aliases-----------]
+You can specify Aliases on the Git config, to assign an alias to a git command so that you can execute it quicker for example.
+[git config --global alias.lga "log --graph --oneline --all --decorate"]: In this case, specify an alias for the log command, on the global config. Specify the command to run between the quote marks.
+
+
+----------------------Branching, Merging and Rebasing with Git-----------------------
+
