@@ -127,7 +127,33 @@ Since it creates the tag and points to the HEAD commit when the tag was created,
 [---------Aliases-----------]
 You can specify Aliases on the Git config, to assign an alias to a git command so that you can execute it quicker for example.
 [git config --global alias.lga "log --graph --oneline --all --decorate"]: In this case, specify an alias for the log command, on the global config. Specify the command to run between the quote marks.
-
+[git log -all]: use --all to visualize all the Branches, instead of just the current one.
 
 ----------------------Branching, Merging and Rebasing with Git-----------------------
 
+----------Branching
+[git branch feature1]: Creates a new branch for feature1
+[git checkout feature1]
+[git branch fix1 974b56a]: Create a branch named fix1 that will begin from the 974b56a commit.
+[git checkout fix1]: Switch to  branch fix1.
+
+[git branch -m fix1 bug1234]: use -m to MOVE (rename) the branch, from fix1 to bug1234. 
+[git branch -d bug1234]: use -d to delete the branch buy1234. IF the branch is not fully merged it displays a warning.
+[git branch -D bug1234]: Use capital -D to force delete the branch.
+
+[git checkout -b feature2]: use checkout -b to create a branch and checkout to that branch. Faster way of [git branch feature2], [git checkout feature2].
+
+----------Recovering Deleted Commits
+[git reflog]: opens the Log of References of where HEAD has pointed. You can see the commit of the deleted item. 
+			  You can create a new branch, and specify from which deleted commit you want to create it.
+[git branch bug1234 5a78c8b]: Create a branch from the 5a78c8b commit (Even when deleted).
+You can then [git show HEAD] to show the commit info, in this case we look at the HEAD commit.
+NOTE: By Default, these commits will be kept by 30 days, after that, the GC will clean up the commits.
+
+-----------Stashing Changes
+You want to stash changes when you have work that you don't want to lose but also is not ready for commit (kinda like a Shelve)
+[git stash]: To Stash pending changes. Stashes the changes and rollsback your changes to the HEAD version.
+[git stash list]: Show the list of Stashed commits.
+[git stash apply]: To apply the changes that were done and were staged. This is done recursevly. 
+[git stash pop]: Pops the head stashed element from the stack. Stashed commits are stored on a Stack. 
+[git stash branch feature2_additional]: switch the stashed commit to a new branch called 'feature2_additional'.
